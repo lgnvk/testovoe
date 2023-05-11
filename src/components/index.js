@@ -4,7 +4,7 @@ import './UI';
 
 import AppHeader from './AppHeader.vue';
 import AppContent from './AppContent.vue';
-import DataTable from './DataTable.vue';
+import DataTable from './DataTable';
 
 Vue.component('app-header', AppHeader);
 Vue.component('app-content', AppContent);

@@ -25,6 +25,6 @@ describe('Money component', () => {
     await wrapper.vm.$nextTick();
 
     expect(control.element.value).toBe(value);
-    expect(wrapper.emitted('input')[1]).toEqual(emitted === undefined ? undefined : [emitted]);
+    expect(wrapper.emitted('change-input')[0]).toEqual(emitted === undefined ? [undefined] : [emitted]);
   });
 });

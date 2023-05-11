@@ -1,10 +1,13 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import api from '@/api';
+import getPayments from '@/mocks/getPayments';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const isMock = process.env.VUE_APP_FETCHING_MODE === 'mock';
+
+const store = new Vuex.Store({
 
   state: () => ({
     data: [],
@@ -32,10 +35,11 @@ export default new Vuex.Store({
       commit('setState', { isLoading: true });
 
       try {
-        const { data } = await api.getPayments(params);
+        const { data } = isMock ? await getPayments(params) : await api.getPayments(params);
 
-        if (Array.isArray(data)) {
+        if (Array.isArray(data) && data.length) {
           commit('setState', { data });
+          commit('setState', { isCached: true });
         }
       } catch (e) {
         // eslint-disable-next-line no-alert
@@ -44,5 +48,24 @@ export default new Vuex.Store({
         commit('setState', { isLoading: false });
       }
     },
+    initStore() {
+      if (localStorage.getItem('data')) {
+        const data = JSON.parse(localStorage.getItem('data'));
+        this.commit('setState', { data });
+      } else {
+        this.dispatch('load', {});
+      }
+    },
+    clearCache() {
+      this.commit('setState', { data: [] });
+      this.commit('setState', { isCached: false });
+      this.dispatch('load', {});
+    },
   },
 });
+
+store.subscribe((_, state) => {
+  localStorage.setItem('data', JSON.stringify(state.data));
+});
+
+export default store;
