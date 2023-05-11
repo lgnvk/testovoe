@@ -1,7 +1,7 @@
 <template>
   <div class="data-table">
     <div class="data-table__filter">
-      <ui-money :value="moneyFilter" @change-input="changeInput"/>
+      <ui-money :value="moneyFilter" @change-input="debounceInput"/>
     </div>
 
     <!-- Your component code here -->
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import DataTableColumn from './DataTableColumn.vue';
 import DataTableCard from './DataTableCard.vue';
 import FormatterMixin from '../../mixins/FormatterMixin';
@@ -68,9 +69,9 @@ export default {
   },
 
   methods: {
-    changeInput(value) {
+    debounceInput: _.debounce(function changeInput(value) {
       this.moneyFilter = value;
-    },
+    }, 200),
   },
 };
 </script>

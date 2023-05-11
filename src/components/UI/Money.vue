@@ -2,13 +2,12 @@
   <input
     type="text"
     :value="valueInput"
-    @input="(e) => debounceInput(e.target.value)"
+    @input="(e) => validateInput(e.target.value)"
     class="ui-money"
   />
 </template>
 
 <script>
-import _ from 'lodash';
 import { nextTick } from 'vue';
 import FormatterMixin from '../../mixins/FormatterMixin';
 
@@ -32,7 +31,7 @@ export default {
   },
 
   methods: {
-    debounceInput: _.debounce(function validateInput(value) {
+    validateInput(value) {
       this.valueInput = value;
 
       let cur = value;
@@ -56,7 +55,7 @@ export default {
       }
       // Ограничение на знаки после точки
       if (cur.match(/\./g)) {
-        const [__, after] = cur.split('.');
+        const [_, after] = cur.split('.');
         if (after.length > 2) {
           cur = cur.slice(0, cur.length - 1);
         }
@@ -67,7 +66,7 @@ export default {
       nextTick(() => {
         this.valueInput = this.formatMoney(cur);
       });
-    }, 150),
+    },
   },
 };
 </script>
