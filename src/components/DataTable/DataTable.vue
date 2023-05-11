@@ -28,7 +28,6 @@ import DataTableCard from './DataTableCard.vue';
 import FormatterMixin from '../../mixins/FormatterMixin';
 
 export default {
-  inna: window.innerWidth,
   name: 'DataTable',
   components: {
     DataTableColumn,
@@ -51,7 +50,6 @@ export default {
     page: 1,
     pageSize: 4,
     moneyFilter: 0,
-    screenWidth: 0,
   }),
 
   computed: {
