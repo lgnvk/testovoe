@@ -37,15 +37,7 @@ const store = new Vuex.Store({
       commit('setState', { isLoading: true });
 
       try {
-        const { data } = await api.getPayments(params).catch(async (err) => {
-          if (process.env.VUE_APP_FETCHING_MODE === 'mock') {
-            const mock = await getPayments(params);
-            return mock;
-          }
-          // eslint-disable-next-line no-alert
-          alert(err.message);
-          return {};
-        });
+        const { data } = isMock ? await getPayments(params) : await api.getPayments(params);
 
         if (Array.isArray(data) && data.length) {
           commit('setState', { data });
