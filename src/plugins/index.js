@@ -1,3 +1,3 @@
-import saveToLocalStorage from './StoreCachinPlugin';
+import saveToLocalStorage from './StoreCachingPlugin';
 
 export { saveToLocalStorage };
