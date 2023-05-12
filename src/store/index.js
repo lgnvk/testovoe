@@ -2,12 +2,14 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import api from '@/api';
 import getPayments from '@/mocks/getPayments';
+import { saveToLocalStorage } from '../plugins';
 
 Vue.use(Vuex);
 
 const isMock = process.env.VUE_APP_FETCHING_MODE === 'mock';
 
 const store = new Vuex.Store({
+  plugins: [saveToLocalStorage],
 
   state: () => ({
     data: [],
@@ -62,10 +64,6 @@ const store = new Vuex.Store({
       this.dispatch('load', {});
     },
   },
-});
-
-store.subscribe((_, state) => {
-  localStorage.setItem('data', JSON.stringify(state.data));
 });
 
 export default store;
