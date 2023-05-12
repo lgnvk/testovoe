@@ -1,10 +1,13 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import api from '@/api';
+import { CacheService } from '../services';
+import { saveToLocalStorage } from '../plugins';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
+  plugins: [saveToLocalStorage],
 
   state: () => ({
     data: [],
@@ -34,8 +37,9 @@ export default new Vuex.Store({
       try {
         const { data } = await api.getPayments(params);
 
-        if (Array.isArray(data)) {
+        if (Array.isArray(data) && data.length) {
           commit('setState', { data });
+          commit('setState', { isCached: true });
         }
       } catch (e) {
         // eslint-disable-next-line no-alert
@@ -44,5 +48,20 @@ export default new Vuex.Store({
         commit('setState', { isLoading: false });
       }
     },
+    initStore() {
+      if (CacheService.getItem('data')) {
+        const data = CacheService.getItem('data');
+        this.commit('setState', { data });
+      } else {
+        this.dispatch('load', {});
+      }
+    },
+    clearCache() {
+      this.commit('setState', { data: [] });
+      this.commit('setState', { isCached: false });
+      this.dispatch('load', {});
+    },
   },
 });
+
+export default store;

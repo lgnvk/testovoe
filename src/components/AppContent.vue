@@ -10,7 +10,7 @@
           <p>You can clear cache and load data again.</p>
         </template>
         <template #footer>
-          <ui-button type="primary">
+          <ui-button type="primary" @click="clearCache">
             Clear cache
           </ui-button>
         </template>
@@ -65,12 +65,13 @@ export default {
   },
 
   created() {
-    this.load();
+    this.initStore();
   },
 
   methods: {
     ...mapActions([
-      'load',
+      'initStore',
+      'clearCache',
     ]),
   },
 };
