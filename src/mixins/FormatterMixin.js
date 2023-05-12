@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon';
+import DateTime from 'luxon/src/datetime';
 
 const FormatterMixin = {
   methods: {
@@ -11,11 +11,11 @@ const FormatterMixin = {
       return value;
     },
     formatDate(value) {
-      value = DateTime.fromISO(value).toLocaleString();
-      if (value.match(/[^0-9,.]/)) {
+      const date = DateTime.fromISO(value).toLocaleString();
+      if (date.match(/[^0-9,.]/)) {
         return '';
       }
-      return value;
+      return date;
     },
     formatRow(value, columnProp) {
       if (columnProp === 'money') {

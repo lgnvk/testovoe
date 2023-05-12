@@ -10,6 +10,7 @@
 <script>
 import { nextTick } from 'vue';
 import FormatterMixin from '../../mixins/FormatterMixin';
+import { comma, dot, numberAndDot } from '../../constants/regExConstants';
 
 export default {
 
@@ -34,37 +35,37 @@ export default {
     validateInput(value) {
       this.valueInput = value;
 
-      let cur = value;
-      const prev = this.prevValueInput;
+      let curValue = value;
+      const prevValue = this.prevValueInput;
 
       // Замена запятой на точку
-      if (cur.match(/,/g)) {
-        cur = cur.replace(/,/g, '.');
+      if (curValue.match(comma)) {
+        curValue = curValue.replace(comma, '.');
       }
       // Замена неразрешенных символов
-      if (cur.match(/[^0-9.]/g)) {
-        cur = cur.replace(/[^0-9.]/g, '');
+      if (curValue.match(numberAndDot)) {
+        curValue = curValue.replace(numberAndDot, '');
       }
       // Запрет на точки первым знаком
-      if (cur[0] === '.') {
-        cur = cur.slice(1);
+      if (curValue[0] === '.') {
+        curValue = curValue.slice(1);
       }
       // Запрет на ввод двух точек
-      if (cur.length > 1 && cur[cur.length - 1].match(/[.]/) && cur.length > prev.length && cur.slice(0, cur.length - 1).match(/\./g)) {
-        cur = cur.slice(0, cur.length - 1);
+      if (curValue.length > 1 && curValue[curValue.length - 1].match(dot) && curValue.length > prevValue.length && curValue.slice(0, curValue.length - 1).match(dot)) {
+        curValue = curValue.slice(0, curValue.length - 1);
       }
       // Ограничение на знаки после точки
-      if (cur.match(/\./g)) {
-        const [_, after] = cur.split('.');
+      if (curValue.match(dot)) {
+        const [_, after] = curValue.split('.');
         if (after.length > 2) {
-          cur = cur.slice(0, cur.length - 1);
+          curValue = curValue.slice(0, curValue.length - 1);
         }
       }
 
-      this.prevValueInput = cur;
-      this.$emit('change-input', cur ? Number(cur) : undefined);
+      this.prevValueInput = curValue;
+      this.$emit('change-input', curValue ? Number(curValue) : undefined);
       nextTick(() => {
-        this.valueInput = this.formatMoney(cur);
+        this.valueInput = this.formatMoney(curValue);
       });
     },
   },

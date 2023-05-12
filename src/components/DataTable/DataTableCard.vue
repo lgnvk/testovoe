@@ -1,7 +1,7 @@
 <template>
     <div class="data-table__card">
-        <div v-for="column in columns" :key="column.prop" class="data-table__card-row">
-            <b>{{ column.label }}</b><br/> {{ row[column.prop] }}
+        <div v-for="{label, prop} in columns" :key="prop" class="data-table__card-row">
+            <b>{{ label }}</b><br/> {{ row[prop] }}
         </div>
     </div>
 </template>

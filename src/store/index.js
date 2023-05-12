@@ -1,12 +1,10 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import api from '@/api';
-import getPayments from '@/mocks/getPayments';
+import { CacheService } from '../services';
 import { saveToLocalStorage } from '../plugins';
 
 Vue.use(Vuex);
-
-const isMock = process.env.VUE_APP_FETCHING_MODE === 'mock';
 
 const store = new Vuex.Store({
   plugins: [saveToLocalStorage],
@@ -37,7 +35,7 @@ const store = new Vuex.Store({
       commit('setState', { isLoading: true });
 
       try {
-        const { data } = isMock ? await getPayments(params) : await api.getPayments(params);
+        const { data } = await api.getPayments(params);
 
         if (Array.isArray(data) && data.length) {
           commit('setState', { data });
@@ -51,8 +49,8 @@ const store = new Vuex.Store({
       }
     },
     initStore() {
-      if (localStorage.getItem('data')) {
-        const data = JSON.parse(localStorage.getItem('data'));
+      if (CacheService.getItem('data')) {
+        const data = CacheService.getItem('data');
         this.commit('setState', { data });
       } else {
         this.dispatch('load', {});

@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import debounce from 'lodash/debounce';
 import DataTableColumn from './DataTableColumn.vue';
 import DataTableCard from './DataTableCard.vue';
 import FormatterMixin from '../../mixins/FormatterMixin';
@@ -69,7 +69,7 @@ export default {
   },
 
   methods: {
-    debounceInput: _.debounce(function changeInput(value) {
+    debounceInput: debounce(function changeInput(value) {
       this.moneyFilter = value;
     }, 200),
   },
